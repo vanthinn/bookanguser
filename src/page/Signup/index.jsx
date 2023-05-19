@@ -58,9 +58,14 @@ function Signup(props) {
         try {
             const fetchApi = async () => {
                 const response = await authApi.register(values)
-                toast.success('Sign up successfully !!!')
-                navigate('/login')
-                setisloading(false)
+                if (response.success) {
+                    toast.success('Sign up successfully !!!')
+                    navigate('/login')
+                    setisloading(false)
+                } else {
+                    setisloading(false)
+                    toast.error('Sign up fail !!!')
+                }
             }
             fetchApi()
         } catch (error) {

@@ -104,11 +104,17 @@ function Header(props) {
             const fetchAPI = async () => {
                 const response = await productApi.getAll()
                 dispatch(setProducts(response))
-                setListProduct(response)
+                if (valuesSearch) {
+                    const tmp = response.filter(
+                        (product) =>
+                            product.product_name.indexOf(`${valuesSearch}`) >= 0
+                    )
+                    setListProduct(tmp)
+                }
             }
             fetchAPI()
         } catch (error) {}
-    }, [])
+    }, [valuesSearch])
 
     useEffect(() => {
         window.addEventListener('scroll', onNavScroll)
