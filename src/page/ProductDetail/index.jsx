@@ -58,21 +58,32 @@ function ProductDetail(props) {
     }, [product])
 
     function handleAddItem() {
-        const action = {
-            ...product,
-            cartQuantity: countProduct,
-        }
-        dispatch(addItemToCart(action))
-        try {
-            const fetchAdd = async () => {
-                const response = await CartApi.addCart(product.slug, {
-                    userId: id,
-                })
-                console.log(response.data)
+        if (product.stock > 0) {
+            const action = {
+                ...product,
+                cartQuantity: countProduct,
             }
-            fetchAdd()
-        } catch (error) {
-            console.error(error)
+            dispatch(addItemToCart(action))
+            try {
+                const fetchAdd = async () => {
+                    const response = await CartApi.addCart(product.slug, {
+                        userId: id,
+                    })
+                    console.log(response.data)
+                }
+                fetchAdd()
+            } catch (error) {
+                console.error(error)
+            }
+        } else {
+            toast.error(
+                `Add ${product.product_name} Fail !
+                Stock product: ${product.stock}
+                `,
+                {
+                    position: 'top-center',
+                }
+            )
         }
     }
 

@@ -25,7 +25,7 @@ const CartSlice = createSlice({
                 state.cartItems.push(action.payload)
             }
             toast.success(
-                `Add ${action.payload.cartQuantity} ${action.payload.title} Successfully!`,
+                `Add ${action.payload.cartQuantity} ${action.payload.product_name} Successfully!`,
                 {
                     position: 'top-center',
                 }

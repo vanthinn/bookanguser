@@ -58,13 +58,19 @@ function Signup(props) {
         try {
             const fetchApi = async () => {
                 const response = await authApi.register(values)
+                console.log(response)
                 if (response.success) {
                     toast.success('Sign up successfully !!!')
                     navigate('/login')
                     setisloading(false)
                 } else {
+                    let firstValue
+                    for (let key in response.details) {
+                        firstValue = response.details[key]
+                        break
+                    }
                     setisloading(false)
-                    toast.error('Sign up fail !!!')
+                    toast.error(`${firstValue[0]} !!!`)
                 }
             }
             fetchApi()

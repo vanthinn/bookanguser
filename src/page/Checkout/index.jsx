@@ -51,19 +51,29 @@ function Checkout(props) {
                         total: total,
                     })
                     console.log(respone)
+                    if (respone.success) {
+                        toast.promise(
+                            axios.get('http://127.0.0.1:8000/store'),
+                            {
+                                loading: 'Loading...',
+                                success: 'Thank you so much 😍😍😍 ',
+                                error: 'error occurs in data',
+                            }
+                        )
+                        dispatch(ClearAll())
+                        navigate('/products')
+                        window.scrollTo(0, 0)
+                    } else {
+                        toast.error(`${respone.message} `, {
+                            position: 'top-center',
+                        })
+                        window.scrollTo(0, 0)
+                    }
                 }
                 fetch()
             } catch (err) {
                 console.log(err)
             }
-            toast.promise(axios.get('http://127.0.0.1:8000/store'), {
-                loading: 'Loading...',
-                success: 'Thank you so much 😍😍😍 ',
-                error: 'error occurs in data',
-            })
-            dispatch(ClearAll())
-            navigate('/products')
-            window.scrollTo(0, 0)
         },
     })
     return (

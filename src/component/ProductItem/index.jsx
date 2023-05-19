@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {addItemToCart} from '../../app/CartSlice'
 import toast from 'react-hot-toast'
 import CartApi from '../../api/cartApi'
-import axios from 'axios'
 
 function ProductItem(props) {
     const navigate = useNavigate()
@@ -20,17 +19,28 @@ function ProductItem(props) {
     }
 
     function handleAddItemToCart(product) {
-        const action = {...product, cartQuantity: 1}
-        dispatch(addItemToCart(action))
-        const values = {userId: id}
-        try {
-            const fetchAdd = async () => {
-                const response = await CartApi.addCart(product.slug, values)
-                console.log(response)
+        if (product.stock > 0) {
+            const action = {...product, cartQuantity: 1}
+            dispatch(addItemToCart(action))
+            const values = {userId: id}
+            try {
+                const fetchAdd = async () => {
+                    const response = await CartApi.addCart(product.slug, values)
+                    console.log(response)
+                }
+                fetchAdd()
+            } catch (error) {
+                console.log(error)
             }
-            fetchAdd()
-        } catch (error) {
-            console.log(error)
+        } else {
+            toast.error(
+                `Add ${product.product_name} Fail !
+                Stock product: ${product.stock}
+                `,
+                {
+                    position: 'top-center',
+                }
+            )
         }
     }
     return (
@@ -42,7 +52,6 @@ function ProductItem(props) {
                     alt={product_name}
                     onClick={() => handleClick()}
                 />
-
                 <div
                     className='absolute bottom-0 bg-slate-800 flex justify-center items-center py-2 translate-y-[50%] 
           transition-all duration-300 ease-linear z-10
